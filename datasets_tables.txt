@@ -1,0 +1,13 @@
+CREATE table `slalom-ai-ml.sentiment_ds.reddit_comments`
+as
+select created_utc,body from `fh-bigquery.reddit_comments.2018_01`
+
+
+
+CREATE view `slalom-ai-ml.sentiment_ds.sentiment_analysis`
+as
+select TIMESTAMP_TRUNC(TIMESTAMP_SECONDS(created_utc), DAY) as date_formatted,
+avg((sentiment*magnitude)) as MagofSentiment
+from `slalom-ai-ml.sentiment_ds.reddit_comments_languages_enriched`
+group by date_formatted
+order by date_formatted
