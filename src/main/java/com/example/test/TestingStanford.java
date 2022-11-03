@@ -1,7 +1,6 @@
 package com.example.test;
 
 
-import com.google.cloud.language.v1.Document;
 import opennlp.tools.langdetect.Language;
 import opennlp.tools.langdetect.LanguageDetector;
 import opennlp.tools.langdetect.LanguageDetectorME;
@@ -19,7 +18,6 @@ public class TestingStanford {
         LanguageDetectorModel m = new LanguageDetectorModel(is);
         LanguageDetector myCategorizer = new LanguageDetectorME(m);
         String text = "bad token , etherum is very bad so don't buy it. I had very bad experience! ADA is very good, buy ADA instead!";
-        Document doc = Document.newBuilder().setContent(text).setType(Document.Type.PLAIN_TEXT).build();
         Language bestLanguage = myCategorizer.predictLanguage(text);
 
         DateTime start = DateTime.now();

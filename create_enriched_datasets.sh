@@ -21,6 +21,6 @@ export GOOGLE_APPLICATION_CREDENTIALS="/home/$USER/analysis/json-key.json"
 
 mvn compile exec:java \
  -Dexec.mainClass=com.example.test.${ANALYZER} \
- -Dexec.args="--project=$PROJECT --region=us-central1 --bucket=$BUCKET --dataset=$DATASETNAME --table=$TABLENAME --delay=$DELAY --year=$YEAR --month=$MONTH --autoscalingAlgorithm=NONE --numWorkers=$MAX_NUM_WORKERS  "
+ -Dexec.args="--project=$PROJECT --region=us-central1 --bucket=$BUCKET --dataset=$DATASETNAME --table=$TABLENAME --year=$YEAR --month=$MONTH --experiments=use_runner_v2 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=$MAX_NUM_WORKERS --workerMachineType=c2-standard-8 "
 
 # --workerMachineType=n1-highmem-8"

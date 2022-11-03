@@ -17,7 +17,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <beam.version>2.34.0</beam.version>
+        <beam.version>2.42.0</beam.version>
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
         <maven-exec-plugin.version>1.6.0</maven-exec-plugin.version>
         <slf4j.version>1.7.25</slf4j.version>
@@ -115,11 +115,11 @@
             <artifactId>slf4j-jdk14</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.cloud</groupId>
-            <artifactId>google-cloud-language</artifactId>
-            <version>1.99.4</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.google.cloud</groupId>-->
+<!--            <artifactId>google-cloud-language</artifactId>-->
+<!--            <version>1.99.4</version>-->
+<!--        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.apache.opennlp/opennlp-tools -->
         <dependency>
             <groupId>org.apache.opennlp</groupId>

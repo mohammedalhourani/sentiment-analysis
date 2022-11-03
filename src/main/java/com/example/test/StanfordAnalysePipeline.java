@@ -3,9 +3,6 @@ package com.example.test;
 import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.api.services.bigquery.model.TableRow;
 import com.google.api.services.bigquery.model.TableSchema;
-import com.google.cloud.language.v1.Document;
-import com.google.cloud.language.v1.LanguageServiceClient;
-import com.google.cloud.language.v1.Sentiment;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import org.apache.beam.runners.dataflow.DataflowRunner;
@@ -18,7 +15,9 @@ import org.apache.beam.sdk.options.Default;
 import org.apache.beam.sdk.options.Description;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
 import org.apache.beam.sdk.transforms.DoFn;
+import org.apache.beam.sdk.transforms.GroupByKey;
 import org.apache.beam.sdk.transforms.ParDo;
+import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
 import org.joda.time.Duration;
 import org.slf4j.Logger;
@@ -28,7 +27,9 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+
 
 public class StanfordAnalysePipeline {
     @DefaultCoder(AvroCoder.class)
@@ -125,11 +126,13 @@ public class StanfordAnalysePipeline {
                                 "Read from BigQuery reddit comments",
                                 BigQueryIO.readTableRows()
                                         .from(String.format("%s:%s.%s", options.getProject(), options.getDataset(), options.getTable()))
-                        );
+                        ).apply(ParDo.of(new PipelineRepartitioner.AddArbitraryKey<>()))
+                        .apply(GroupByKey.create())
+                        .apply(ParDo.of(new PipelineRepartitioner.RemoveArbitraryKey<>()));
 
 
-        PCollection<TableRow> output = input.
-                apply("enrich comments with sentiment and magnitude ", ParDo.of(new DoFn<TableRow, TableRow>() {
+        PCollection<TableRow> output = input
+                .apply("enrich comments with sentiment and magnitude ", ParDo.of(new DoFn<TableRow, TableRow>() {
                     @ProcessElement
                     public void processElement(ProcessContext c) throws IOException, InterruptedException {
                         TableRow e = c.element();
