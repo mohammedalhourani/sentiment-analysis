@@ -105,15 +105,22 @@ public class IdentifyLanguagePipeline {
                         TableRow e = c.element();
                         long created_utc = Long.parseLong(e.get("created_utc").toString());
                         String body = (String) e.get("body");
-                        try {
-                            Language bestLanguage = LanguageHelper.getLanguageHelper().predictLanguage(body);
-                            String lang = bestLanguage.getLang();
-                            TableRow row = new TableRow()
-                                    .set("body", body)
-                                    .set("created_utc", created_utc)
-                                    .set("language", lang);
-                            c.output(row);
-                        } catch (Exception ex) {
+                        if (body.length() < 1000) {
+                            try {
+                                Language bestLanguage = LanguageHelper.getLanguageHelper().predictLanguage(body);
+                                String lang = bestLanguage.getLang();
+                                TableRow row = new TableRow()
+                                        .set("body", body)
+                                        .set("created_utc", created_utc)
+                                        .set("language", lang);
+                                c.output(row);
+                            } catch (Exception ex) {
+                                TableRow row = new TableRow()
+                                        .set("body", body)
+                                        .set("created_utc", created_utc)
+                                        .set("language", "");
+                            }
+                        } else {
                             TableRow row = new TableRow()
                                     .set("body", body)
                                     .set("created_utc", created_utc)
