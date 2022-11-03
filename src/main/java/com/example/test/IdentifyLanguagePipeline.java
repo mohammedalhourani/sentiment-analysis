@@ -44,7 +44,7 @@ public class IdentifyLanguagePipeline {
 
     public static interface MyOptions extends DataflowPipelineOptions {
         @Description("Bucket")
-            @Default.String("sentiment-analysis-bucket-test")
+        @Default.String("sentiment-analysis-bucket-test")
         String getBucket();
 
         void setBucket(String s);
@@ -93,8 +93,7 @@ public class IdentifyLanguagePipeline {
                 pipeline
                         .apply(
                                 "Read from BigQuery reddit comments",
-                                BigQueryIO.readTableRows().from(String.format("%s:%s.%s", options.getProject(), options.getDataset(), options.getTable())))
-                        ;
+                                BigQueryIO.readTableRows().from(String.format("%s:%s.%s", options.getProject(), options.getDataset(), options.getTable())));
 
 
         PCollection<TableRow> output = input.
@@ -106,13 +105,20 @@ public class IdentifyLanguagePipeline {
                         TableRow e = c.element();
                         long created_utc = Long.parseLong(e.get("created_utc").toString());
                         String body = (String) e.get("body");
-                        Language bestLanguage = LanguageHelper.getLanguageHelper().predictLanguage(body);
-                        String lang = bestLanguage.getLang();
-                        TableRow row = new TableRow()
-                                .set("body", body)
-                                .set("created_utc", created_utc)
-                                .set("language", lang);
-                        c.output(row);
+                        try {
+                            Language bestLanguage = LanguageHelper.getLanguageHelper().predictLanguage(body);
+                            String lang = bestLanguage.getLang();
+                            TableRow row = new TableRow()
+                                    .set("body", body)
+                                    .set("created_utc", created_utc)
+                                    .set("language", lang);
+                            c.output(row);
+                        } catch (Exception ex) {
+                            TableRow row = new TableRow()
+                                    .set("body", body)
+                                    .set("created_utc", created_utc)
+                                    .set("language", "");
+                        }
                     }
                 }));
 

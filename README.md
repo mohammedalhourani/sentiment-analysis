@@ -11,10 +11,10 @@ after that run this command to give execute permessions to scripts:
 >chmod 755 create_*
 
 to run the pipeline to detect the language you need to run this command:
->./create_with_languages_datasets.sh sentiment_ds reddit_comments sentiment-analysis-bucket-test 16
+>./create_with_languages_datasets.sh sentiment_ds reddit_comments sentiment-analysis-bucket-test 64
 
 Run Stanford analyser:
->./create_enriched_datasets.sh StanfordAnalysePipeline sentiment_ds reddit_comments_languages sentiment-analysis-bucket-test **2019** **1** 8
+>./create_enriched_datasets.sh StanfordAnalysePipeline sentiment_ds reddit_comments_languages sentiment-analysis-bucket-test **2019** **1** 126
 
 to get more infomation you can look inside both script files to see which Apache Beam class is used for each pipeline and how the methods are passed.
 

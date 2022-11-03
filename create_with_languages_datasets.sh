@@ -17,5 +17,5 @@ export GOOGLE_APPLICATION_CREDENTIALS="/home/$USER/analysis/json-key.json"
 
 mvn compile exec:java \
  -Dexec.mainClass=com.example.test.IdentifyLanguagePipeline \
- -Dexec.args="--project=$PROJECT --region=us-central1 --bucket=$BUCKET --dataset=$DATASETNAME --table=$TABLENAME --maxNumWorkers=$MAX_NUM_WORKERS --autoscalingAlgorithm=THROUGHPUT_BASED"
+ -Dexec.args="--project=$PROJECT --region=us-central1 --bucket=$BUCKET --dataset=$DATASETNAME --table=$TABLENAME --maxNumWorkers=$MAX_NUM_WORKERS --autoscalingAlgorithm=THROUGHPUT_BASED --workerMachineType=c2-standard-16"
 

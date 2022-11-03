@@ -139,19 +139,29 @@ public class StanfordAnalysePipeline {
 
                         SentimentResult sentimentResult = new SentimentResult();
                         sentimentResult.setOriginalText(body);
-                        if (lang.equals("eng")) {
-                            StanfordSentimentAnalyzerProcessor.populateOverallSentimentIndexScore(body, sentimentResult);
+                        try {
+                            if (lang.equals("eng")) {
+                                StanfordSentimentAnalyzerProcessor.populateOverallSentimentIndexScore(body, sentimentResult);
+                            }
+                            double sentimentValue = (sentimentResult.getOverallSentimentScore() == 0 ? 0.0d : (sentimentResult.getOverallSentimentClassIndexScore() < 0 ? -1 : 1) * sentimentResult.getOverallSentimentScore());
+                            double magnitudeValue = (sentimentResult.getOverallSentimentScore() == 0 ? 0.0d : (Math.abs(sentimentResult.getOverallSentimentClassIndexScore())));
+                            TableRow row = new TableRow()
+                                    .set("body", body)
+                                    .set("created_utc", created_utc)
+                                    .set("language", lang)
+                                    .set("magnitude", magnitudeValue)
+                                    .set("sentiment", sentimentValue);
+                            c.output(row);
+                        } catch (Exception ex) {
+                            TableRow row = new TableRow()
+                                    .set("body", body)
+                                    .set("created_utc", created_utc)
+                                    .set("language", lang)
+                                    .set("magnitude", 0)
+                                    .set("sentiment", 0);
+                            c.output(row);
+                            
                         }
-                        double sentimentValue = (sentimentResult.getOverallSentimentScore() == 0 ? 0.0d : (sentimentResult.getOverallSentimentClassIndexScore() < 0 ? -1 : 1) * sentimentResult.getOverallSentimentScore());
-                        double magnitudeValue = (sentimentResult.getOverallSentimentScore() == 0 ? 0.0d : (Math.abs(sentimentResult.getOverallSentimentClassIndexScore())));
-                        TableRow row = new TableRow()
-                                .set("body", body)
-                                .set("created_utc", created_utc)
-                                .set("language", lang)
-                                .set("magnitude", magnitudeValue)
-                                .set("sentiment", sentimentValue);
-
-                        c.output(row);
                     }
                 }));
 
