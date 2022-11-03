@@ -143,7 +143,7 @@ public class StanfordAnalysePipeline {
                             try {
 
                                 StanfordSentimentAnalyzerProcessor.populateOverallSentimentIndexScore(body, sentimentResult);
-                                
+
                                 double sentimentValue = (sentimentResult.getOverallSentimentScore() == 0 ? 0.0d : (sentimentResult.getOverallSentimentClassIndexScore() < 0 ? -1 : 1) * sentimentResult.getOverallSentimentScore());
                                 double magnitudeValue = (sentimentResult.getOverallSentimentScore() == 0 ? 0.0d : (Math.abs(sentimentResult.getOverallSentimentClassIndexScore())));
                                 TableRow row = new TableRow()

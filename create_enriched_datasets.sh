@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$#" -ne 8 ]; then
+if [ "$#" -ne 7 ]; then
     echo "Usage: ./create_datasets.sh Analyzer-Class dataset-name table-name bucket-name year-filter month-filter max-num-workers"
     exit
 fi
