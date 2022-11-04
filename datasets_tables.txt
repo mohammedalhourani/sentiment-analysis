@@ -12,6 +12,10 @@ SELECT body,language,created_utc,TIMESTAMP_TRUNC(TIMESTAMP_SECONDS(created_utc),
 FROM `slalom-ai-ml.sentiment_ds.reddit_comments_languages` as ll where ll.language ='eng'
 
 
+//
+
+CREATE TABLE  slalom-ai-ml.sentiment_ds.reddit_comments_languages_optimized_enriched (body String,language String,created_utc Integer,magnitude NUMERIC ,sentiment NUMERIC , created_date TIMESTAMP)
+PARTITION BY  TIMESTAMP_TRUNC(created_date, DAY);
 
 //this view is needed to calculate final magnitutde of sentiment
 CREATE view `slalom-ai-ml.sentiment_ds.sentiment_analysis`

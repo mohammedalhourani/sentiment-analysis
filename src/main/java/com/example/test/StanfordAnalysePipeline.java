@@ -135,15 +135,15 @@ public class StanfordAnalysePipeline {
                     public void processElement(ProcessContext c) throws IOException, InterruptedException {
                         TableRow e = c.element();
                         long created_utc = Long.parseLong(e.get("created_utc").toString());
+                        String created_date = (String)e.get("created_date");
                         String body = (String) e.get("body");
                         String lang = (String) e.get("language");
 
                         if (lang.equals("eng") && body.length() < 1000) {
-                            SentimentResult sentimentResult = new SentimentResult();
-                            sentimentResult.setOriginalText(body);
+
                             try {
 
-                                StanfordSentimentAnalyzerProcessor.populateOverallSentimentIndexScore(body, sentimentResult);
+                                SentimentResult sentimentResult = StanfordSentimentAnalyzerProcessor.populateOverallSentimentIndexScore(body);
 
                                 double sentimentValue = (sentimentResult.getOverallSentimentScore() == 0 ? 0.0d : (sentimentResult.getOverallSentimentClassIndexScore() < 0 ? -1 : 1) * sentimentResult.getOverallSentimentScore());
                                 double magnitudeValue = (sentimentResult.getOverallSentimentScore() == 0 ? 0.0d : (Math.abs(sentimentResult.getOverallSentimentClassIndexScore())));
@@ -152,7 +152,8 @@ public class StanfordAnalysePipeline {
                                         .set("created_utc", created_utc)
                                         .set("language", lang)
                                         .set("magnitude", magnitudeValue)
-                                        .set("sentiment", sentimentValue);
+                                        .set("sentiment", sentimentValue)
+                                        .set("created_date", created_date);
                                 c.output(row);
                             } catch (Exception ex) {
                                 TableRow row = new TableRow()
@@ -160,7 +161,8 @@ public class StanfordAnalysePipeline {
                                         .set("created_utc", created_utc)
                                         .set("language", lang)
                                         .set("magnitude", 0)
-                                        .set("sentiment", 0);
+                                        .set("sentiment", 0)
+                                        .set("created_date", created_date);
                                 c.output(row);
 
                             }

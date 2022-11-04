@@ -24,9 +24,9 @@ public class TestingStanford {
 
         for (int i = 0; i < 1000; i++) {
             SentimentResult sentimentResult = new SentimentResult();
-            double overallSentiment = new StanfordSentimentAnalyzerProcessor().populateOverallSentimentIndexScore(text, sentimentResult);
+            sentimentResult = new StanfordSentimentAnalyzerProcessor().populateOverallSentimentIndexScore(text );
 
-            //System.out.println("overall score\t" + sentimentResult.getOverallSentimentClass());
+            System.out.println("overall score\t" + sentimentResult.getOverallSentimentClass());
         }
         DateTime end = DateTime.now();
 

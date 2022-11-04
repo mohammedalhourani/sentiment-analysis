@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Properties;
 
 public class StanfordSentimentAnalyzerProcessor {
+    StanfordSentimentAnalyzerProcessor(){
+
+    }
     static StanfordCoreNLP pipeline;
 
 
@@ -26,7 +29,9 @@ public class StanfordSentimentAnalyzerProcessor {
         pipeline = new StanfordCoreNLP(props);
     }
 
-    public static double populateOverallSentimentIndexScore(String text, SentimentResult sentimentResult) {
+    public static SentimentResult populateOverallSentimentIndexScore(String text ) {
+        SentimentResult sentimentResult = new SentimentResult();
+        sentimentResult.setOriginalText(text);
         Annotation nlpDocument = new Annotation(text);
         pipeline.annotate(nlpDocument);
 
@@ -66,6 +71,6 @@ public class StanfordSentimentAnalyzerProcessor {
         sentimentResult.setOverallSentimentClassIndexScore(overallClassIndexScore);
         sentimentResult.setOverallSentimentClass(overallClass);
         sentimentResult.setOverallSentimentScore(numberOfSentences == 0 ? 0 : (sumScore.get(matrixIndex) / numberOfSentences));
-        return overallClassIndexScore;
+        return sentimentResult;
     }
 }
