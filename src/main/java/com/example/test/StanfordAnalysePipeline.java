@@ -126,9 +126,7 @@ public class StanfordAnalysePipeline {
                                 "Read from BigQuery reddit comments",
                                 BigQueryIO.readTableRows()
                                         .from(String.format("%s:%s.%s", options.getProject(), options.getDataset(), options.getTable()))
-                        ).apply(ParDo.of(new PipelineRepartitioner.AddArbitraryKey<>()))
-                        .apply(GroupByKey.create())
-                        .apply(ParDo.of(new PipelineRepartitioner.RemoveArbitraryKey<>()));
+                        );
 
 
         PCollection<TableRow> output = input
@@ -140,9 +138,9 @@ public class StanfordAnalysePipeline {
                         String body = (String) e.get("body");
                         String lang = (String) e.get("language");
 
-                        SentimentResult sentimentResult = new SentimentResult();
-                        sentimentResult.setOriginalText(body);
                         if (lang.equals("eng") && body.length() < 1000) {
+                            SentimentResult sentimentResult = new SentimentResult();
+                            sentimentResult.setOriginalText(body);
                             try {
 
                                 StanfordSentimentAnalyzerProcessor.populateOverallSentimentIndexScore(body, sentimentResult);

@@ -4,6 +4,16 @@ select created_utc,body from `fh-bigquery.reddit_comments.2018_01`
 
 
 
+// after running the language detector pipeline create this optimized table
+CREATE TABLE  slalom-ai-ml.sentiment_ds.reddit_comments_languages_optimized (body String,language String,created_utc Integer, created_date TIMESTAMP)
+PARTITION BY  TIMESTAMP_TRUNC(created_date, DAY)
+as
+SELECT body,language,created_utc,TIMESTAMP_TRUNC(TIMESTAMP_SECONDS(created_utc), DAY) as created_date
+FROM `slalom-ai-ml.sentiment_ds.reddit_comments_languages` as ll where ll.language ='eng'
+
+
+
+//this view is needed to calculate final magnitutde of sentiment
 CREATE view `slalom-ai-ml.sentiment_ds.sentiment_analysis`
 as
 select TIMESTAMP_TRUNC(TIMESTAMP_SECONDS(created_utc), DAY) as date_formatted,

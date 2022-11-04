@@ -13,8 +13,18 @@ after that run this command to give execute permessions to scripts:
 to run the pipeline to detect the language you need to run this command:
 >./create_with_languages_datasets.sh sentiment_ds reddit_comments sentiment-analysis-bucket-test 64
 
+Before running the analyser pipline we need to create an optimized version of the language tagged table:
+
+```
+CREATE TABLE  slalom-ai-ml.sentiment_ds.reddit_comments_languages_optimized (body String,language String,created_utc Integer, created_date TIMESTAMP)
+PARTITION BY  TIMESTAMP_TRUNC(created_date, DAY)
+as
+SELECT body,language,created_utc,TIMESTAMP_TRUNC(TIMESTAMP_SECONDS(created_utc), DAY) as created_date
+FROM `slalom-ai-ml.sentiment_ds.reddit_comments_languages` as ll where ll.language ='eng'
+```
+
 Run Stanford analyser:
->./create_enriched_datasets.sh StanfordAnalysePipeline sentiment_ds reddit_comments_languages sentiment-analysis-bucket-test **2019** **1** 64
+>./create_enriched_datasets.sh StanfordAnalysePipeline sentiment_ds reddit_comments_languages_optimized sentiment-analysis-bucket-test **2018** **1** 64
 
 to get more infomation you can look inside both script files to see which Apache Beam class is used for each pipeline and how the methods are passed.
 
