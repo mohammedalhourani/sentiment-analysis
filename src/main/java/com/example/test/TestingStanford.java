@@ -18,15 +18,15 @@ public class TestingStanford {
         LanguageDetectorModel m = new LanguageDetectorModel(is);
         LanguageDetector myCategorizer = new LanguageDetectorME(m);
         String text = "bad token , etherum is very bad so don't buy it. I had very bad experience! ADA is very good, buy ADA instead!";
-        Language bestLanguage = myCategorizer.predictLanguage(text);
+        //Language bestLanguage = myCategorizer.predictLanguage(text);
 
         DateTime start = DateTime.now();
 
         for (int i = 0; i < 1000; i++) {
-            SentimentResult sentimentResult = new SentimentResult();
+           SentimentResult sentimentResult = new SentimentResult();
             sentimentResult = new StanfordSentimentAnalyzerProcessor().populateOverallSentimentIndexScore(text );
-
-            System.out.println("overall score\t" + sentimentResult.getOverallSentimentClass());
+            //Language bestLanguage = myCategorizer.predictLanguage(text);
+            //System.out.println("overall score\t" + sentimentResult.getOverallSentimentClass());
         }
         DateTime end = DateTime.now();
 

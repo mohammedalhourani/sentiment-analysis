@@ -9,8 +9,8 @@ CREATE TABLE  slalom-ai-ml.sentiment_ds.reddit_comments_languages_optimized (bod
 PARTITION BY  TIMESTAMP_TRUNC(created_date, DAY)
 as
 SELECT body,language,created_utc,TIMESTAMP_TRUNC(TIMESTAMP_SECONDS(created_utc), DAY) as created_date
-FROM `slalom-ai-ml.sentiment_ds.reddit_comments_languages` as ll where ll.language ='eng'
-
+FROM `slalom-ai-ml.sentiment_ds.reddit_comments_languages`  as ll  TABLESAMPLE SYSTEM (15 PERCENT)
+where ll.language ='eng'
 
 //
 

@@ -110,6 +110,10 @@ public class StanfordAnalysePipeline {
                                 new TableFieldSchema()
                                         .setName("sentiment")
                                         .setType("BIGNUMERIC")
+                                        .setMode("REQUIRED"),
+                                new TableFieldSchema()
+                                        .setName("created_date")
+                                        .setType("TIMESTAMP")
                                         .setMode("REQUIRED")));
 
         MyOptions options = PipelineOptionsFactory.fromArgs(args).withValidation().as(MyOptions.class);
@@ -172,7 +176,8 @@ public class StanfordAnalysePipeline {
                                     .set("created_utc", created_utc)
                                     .set("language", lang)
                                     .set("magnitude", 0)
-                                    .set("sentiment", 0);
+                                    .set("sentiment", 0)
+                                    .set("created_date", created_date);
                             c.output(row);
                         }
                     }
